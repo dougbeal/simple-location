@@ -1,7 +1,7 @@
 <?php
 
 add_filter( 'admin_init', array( 'Loc_Config', 'admin_init' ), 10 );
-add_filter( 'init', array( 'Loc_Config', 'init' ), 10 );
+add_filter( 'plugins_loaded', array( 'Loc_Config', 'init' ), 11 );
 add_action( 'admin_menu', array( 'Loc_Config', 'admin_menu' ), 10 );
 
 class Loc_Config {
@@ -21,7 +21,7 @@ class Loc_Config {
 				'type'         => 'string',
 				'description'  => 'Map Provider',
 				'show_in_rest' => false,
-				'default'      => 'mapbox',
+				'default'      => 'wikimedia',
 			)
 		);
 		register_setting(
@@ -218,12 +218,23 @@ class Loc_Config {
 		);
 		register_setting(
 			'simloc', // settings page
+			'sloc_altitude', // option name
+			array(
+				'type'         => 'number',
+				'description'  => 'Simple Location Height After Which Altitude would be displayed(in meters)',
+				'show_in_rest' => true,
+				'default'      => 500,
+			)
+		);
+
+		register_setting(
+			'simloc', // settings page
 			'geo_public', // option name
 			array(
 				'type'         => 'boolean',
 				'description'  => 'Default Setting for Geodata',
 				'show_in_rest' => true,
-				'default'      => 'public',
+				'default'      => 1,
 				// WordPress Geodata defaults to public but this allows a global override for new posts
 			)
 		);
@@ -278,7 +289,7 @@ class Loc_Config {
 	public static function admin_menu() {
 		// If the IndieWeb Plugin is installed use its menu.
 		if ( class_exists( 'IndieWeb_Plugin' ) ) {
-			add_submenu_page(
+			$hook = add_submenu_page(
 				'indieweb',
 				__( 'Simple Location', 'simple-location' ), // page title
 				__( 'Location', 'simple-location' ), // menu title
@@ -287,7 +298,7 @@ class Loc_Config {
 				array( 'Loc_Config', 'simloc_options' )
 			);
 		} else {
-			add_options_page(
+			$hook = add_options_page(
 				'',
 				'Simple Location',
 				'manage_options',
@@ -448,6 +459,17 @@ class Loc_Config {
 			'sloc_map', // settings section
 			array(
 				'label_for' => 'sloc_zoom',
+			)
+		);
+
+		add_settings_field(
+			'altitude', // id
+			__( 'Altitude will Display if Above This Height(in meters)', 'simple-location' ), // setting title
+			array( 'Loc_Config', 'number_callback' ), // display callback
+			'simloc', // settings page
+			'sloc_map', // settings section
+			array(
+				'label_for' => 'sloc_altitude',
 			)
 		);
 

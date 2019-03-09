@@ -23,7 +23,7 @@ class Loc_View {
 		$aunits = get_option( 'sloc_measurements' );
 		switch ( $aunits ) {
 			case 'imperial':
-				$altitude = $altitude * 3.281;
+				$altitude = round( $altitude * 3.281 );
 				$aunits   = 'ft';
 				break;
 			default:
@@ -76,7 +76,7 @@ class Loc_View {
 		if ( 'public' === $args['visibility'] ) {
 			$c .= self::get_the_geo( $loc );
 			if ( isset( $loc['altitude'] ) ) {
-				if ( 500 < (int) $loc['altitude'] ) {
+				if ( get_option( 'sloc_altitude' ) < (int) $loc['altitude'] ) {
 					$loc['altitude'] = self::display_altitude( $loc['altitude'] );
 				} else {
 					unset( $loc['altitude'] );
@@ -114,9 +114,8 @@ class Loc_View {
 	}
 
 	public static function get_the_weather( $weather, $args = null ) {
-		$defaults = array(
-		);
-		$args = wp_parse_args( $args, $defaults );
+		$defaults = array();
+		$args     = wp_parse_args( $args, $defaults );
 		if ( ! is_array( $weather ) || empty( $weather ) ) {
 			return '';
 		}

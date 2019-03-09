@@ -3,7 +3,7 @@
  * Plugin Name: Simple Location
  * Plugin URI: https://wordpress.org/plugins/simple-location/
  * Description: Adds Location to WordPress
- * Version: 3.5.3
+ * Version: 3.6.2
  * Author: David Shanske
  * Author URI: https://david.shanske.com
  * Text Domain: simple-location
@@ -18,7 +18,7 @@ register_deactivation_hook( __FILE__, array( 'Simple_Location_Plugin', 'deactiva
 
 
 class Simple_Location_Plugin {
-	public static $version = '3.5.3';
+	public static $version = '3.6.1';
 
 	public static function activate() {
 		require_once plugin_dir_path( __FILE__ ) . 'includes/class-geo-data.php';
@@ -73,6 +73,7 @@ class Simple_Location_Plugin {
 			'class-loc-view.php', // Location View functionality
 			'class-timezone-result.php',
 			'class-location-plugins.php',
+			'class-location-zones.php',
 			'class-loc-timezone.php',
 			'class-post-timezone.php',
 			'class-airport-location.php',
@@ -93,6 +94,7 @@ class Simple_Location_Plugin {
 			'class-map-provider-bing.php', // Bing
 			'class-map-provider-mapquest.php', // MapQuest
 			'class-map-provider-here.php', // HERE
+			'class-map-provider-wikimedia.php', // Wikimedia
 			'class-geo-provider-nominatim.php', // Nominatim
 			'class-geo-provider-google.php', // Google
 			'class-geo-provider-bing.php', // Bing
